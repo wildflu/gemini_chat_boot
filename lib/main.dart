@@ -7,9 +7,10 @@ import 'package:geminiappchat/presontation/app.dart';
 import 'package:get/get.dart';
 
 void main() {
-  Gemini.init(apiKey: Consts.keyApp);
+  Gemini.init(apiKey: Consts.apiKey);
   runApp(
     const GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       home: App(),
       title: 'Gemini Chat',
     )

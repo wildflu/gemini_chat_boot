@@ -10,31 +10,41 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ChatController extends GetxController {
+  bool isLoading = false;
+  // gemini api instance 'from plugin'
   final gemini = Gemini.instance;
+  // this picker to pick an image 
   final ImagePicker picker = ImagePicker();
+  // text controler for input text
   TextEditingController messageControlelr = TextEditingController();
+  // image file 
   File ?theImage;
-
-
+  // converation list 
   List<ChatMessage> convertation = <ChatMessage>[].obs;
 
-
-  generateText(){
-    gemini.text(messageControlelr.text)
+  // function that generate reponse from text 
+  generateText() async{
+    await gemini.text(messageControlelr.text)
     .then((candidate) =>  convertation.add(ChatMessage(message: candidate?.output, isQuestion: false)))
-    .catchError((e) => print(e));
+    .catchError((e) => log(e));
     messageControlelr.clear();
+    isLoading = false;
   }
 
-  generateTextAndImage(){
-    gemini.textAndImage(
-        text: "What is this picture?",
+  // this function generate reponse base on text and image 
+  generateTextAndImage() async{
+    await gemini.textAndImage(
+        text: messageControlelr.text,
         images: [theImage!.readAsBytesSync()]
       )
-      .then((value) => log(value?.content?.parts?.last.text ?? ''))
+      .then((value) => convertation.add(ChatMessage(message: value?.content?.parts?.last.text, isQuestion: false)))
       .catchError((e) => log('textAndImageInput', error: e));
+    messageControlelr.clear();
+    isLoading = false;
+
   }
 
+  // pick image from local device gallery
   pickImageFromDevice() async{
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if(image != null){
@@ -43,14 +53,17 @@ class ChatController extends GetxController {
     }
   }
 
+  // main function generate repond base on user
   sendMessage() {
     if(messageControlelr.text.isEmpty) return;
+    isLoading = true;
     FocusManager.instance.primaryFocus?.unfocus();
     if(theImage == null){
       convertation.add(ChatMessage(message: messageControlelr.text, isQuestion: true));
       generateText();
     }else{
-      print('implemant image from storage');
+      convertation.add(ChatMessage(message: messageControlelr.text, isQuestion: true));
+      generateTextAndImage();
     }
   }
 }

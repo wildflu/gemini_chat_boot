@@ -24,14 +24,19 @@ class TextFiledFormComponent extends StatelessWidget {
         children: [
           Expanded(
             child: TextFormField(
+              minLines: null,
+              maxLines: null,
+              expands: true,
+              style:  const TextStyle(fontSize: 17, color: Colors.white54, fontWeight: FontWeight.w400),
               controller: controller,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(10),
                 hintText: 'Your Chat Message',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: const BorderSide(width: 1, color: Colors.white)),
-                errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: const BorderSide(width: 1, color: Colors.white)),
-                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: const BorderSide(width: 1, color: Colors.white)),
-                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: const BorderSide(width: 1, color: Colors.white)),
+                hintStyle: const TextStyle(fontSize: 17, color: Colors.white54, fontWeight: FontWeight.w400),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide.none),
+                errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide.none),
+                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide.none),
+                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(5),borderSide: BorderSide.none),
               ),
             ),
           ),
